@@ -1,0 +1,95 @@
+Examples yaml :- 
+
+
+# PV and PVC
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+hostpath:
+    path: /mnt/disks/ssd1
+
+======================
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-volume
+spec:
+  storageClassName: "csi-hostpath-sc"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+
+=============================
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: example-gateway
+spec:
+  gatewayClassName: ngnix 
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+  hostname:
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - kind: Secret
+          name: web-tls
+
+
+========================
+
+
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-route
+spec:
+  parentRefs:
+  - name: web-gateway
+  rules:
+    - backendRefs:
+      - name: web-service
+        weight: 80
+        port: 80 
+      - name: web-service-v2
+        weight: 20
+        port: 80
+
+ ================================       
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: cache-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: cache-statefulset
+  updatePolicy:
+    updateMode: "Initial"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: cache-container
+        controlledResources: ["cpu" , "memory"]
+        maxAllowed:
+          cpu: 1Gi
+          memory: 500Mi
+        minAllowed:
+          cpu: 500Mi
+          memory: 250Mi
+        mode: "Auto"

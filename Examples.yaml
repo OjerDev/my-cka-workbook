@@ -78,7 +78,7 @@ metadata:
 spec:
   targetRef:
     apiVersion: apps/v1
-    kind: StatefulSet
+    kind: StatefulSet #Change to "Deployment if required"
     name: cache-statefulset
   updatePolicy:
     updateMode: "Initial"

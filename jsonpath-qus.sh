@@ -28,4 +28,5 @@ Solution: kubectl -n admin2406 get deployment -o custom-columns=DEPLOYMENT:.meta
 Answer should be in the format: InternalIP of controlplane<space>InternalIP of node01 (in a single line)
 
 Explore the jsonpath loop.
+
 kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips

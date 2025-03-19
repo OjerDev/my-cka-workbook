@@ -19,7 +19,7 @@ helm template argocd argo/argo-cd --version 7.7.3 --namespace argocd --set crds.
 
 -====================
 
-2. Deploying thr new version :- 
+2. Deploying the new version :- 
 
 helm repo ls
 

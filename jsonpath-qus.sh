@@ -1,5 +1,11 @@
 ###### Json related qustions :- 
 
+#imp commands:-
+
+kubectl get nodes -o json | jq -c 'paths'   ----< #it will show the paths exactly
+
+
+
 1. Print the names of all deployments in the admin2406 namespace in the following format:
 
 DEPLOYMENT   CONTAINER_IMAGE   READY_REPLICAS   NAMESPACE

@@ -148,7 +148,12 @@ spec:
 
 ###############################
 
-
+rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        port: 443
 
 rules:
   - filters:

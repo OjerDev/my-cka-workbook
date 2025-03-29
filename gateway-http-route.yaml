@@ -29,6 +29,9 @@ spec:
       mode: Terminate
       certificateRefs:
       - name: redirect-example
+      # certificateRefs:
+    # - kind: Secret
+      # name: web-tls
 
 ##### ---   HTTP Routing basic ----- ######
 

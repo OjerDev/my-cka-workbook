@@ -23,6 +23,7 @@ spec:
     protocol: HTTP
     port: 80
   - name: https
+    hostname: "www.example.com"
     protocol: HTTPS
     port: 443
     tls:
@@ -32,6 +33,7 @@ spec:
       # certificateRefs:
     # - kind: Secret
       # name: web-tls
+      # namespace: gateway-example-ns2  # cross namespace secret ref for tls gateway
 
 
 ##### ---  Shared Gateway for other namespaces ----- ######
@@ -143,3 +145,50 @@ spec:
       - name: web-service-v2
         weight: 20
         port: 80
+
+###############################
+
+
+
+rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 301
+
+rules:
+  - backendRefs:
+    - name: example-svc
+      port: 80
+
+rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /cayenne
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /paprika
+            statusCode: 302
+rules:
+    - backendRefs:
+      - name: web-service
+        weight: 80
+        port: 80 
+      - name: web-service-v2
+        weight: 20
+        port: 80
+
+rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /login
+    backendRefs:
+    - name: example-svc
+      port: 8080
+

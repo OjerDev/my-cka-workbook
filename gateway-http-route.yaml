@@ -148,6 +148,49 @@ spec:
 
 ###############################
 
+List of HTTP routes:- 
+
+1. Basic Routing
+  
+# bascic http route
+rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /login
+    backendRefs:
+    - name: example-svc
+      port: 8080
+
+
+
+# Traffic spliting:
+# trafic splitting b/w two services
+rules:
+    - backendRefs:
+      - name: web-service
+        weight: 80
+        port: 80 
+      - name: web-service-v2
+        weight: 20
+        port: 80
+
+
+#######&&&&&&&&&&##########********######
+
+2. HTTP Redirect and HTTP Rewrites
+    2.1. HTTP Redirect - "RequestRedirect"
+        2.1.1 --> http to  https redirect
+        2.1.2 --> path redirect
+              i)  ReplaceFullPath
+              ii) ReplacePrefixMatch
+              
+    2.2. Rewrite - "URLRewrite"
+    
+#######&&&&&&&&&&##########********######
+
+
+# http to https redirect
 rules:
   - filters:
     - type: RequestRedirect
@@ -155,6 +198,8 @@ rules:
         scheme: https
         port: 443
 
+        
+# http to https redirect first then https to sending the traffic to backend services. so we need a two http routes. http --> https --> backend svc
 rules:
   - filters:
     - type: RequestRedirect
@@ -167,6 +212,9 @@ rules:
     - name: example-svc
       port: 80
 
+
+# Both requests to https://redirect.example/cayenne/pinch and https://redirect.example/cayenne/teaspoon will receive a redirect with a location: https://redirect.example/paprika
+# ReplaceFullPath:- 
 rules:
     - matches:
         - path:
@@ -179,21 +227,88 @@ rules:
               type: ReplaceFullPath
               replaceFullPath: /paprika
             statusCode: 302
-rules:
-    - backendRefs:
-      - name: web-service
-        weight: 80
-        port: 80 
-      - name: web-service-v2
-        weight: 20
-        port: 80
+# ReplacePrefixMatch:- https://redirect.example/cayenne/pinch to https://redirect.example/paprika/pinch and https://redirect.example/paprika/teaspoon response headers
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /cayenne
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /paprika
+            statusCode: 302
 
-rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /login
-    backendRefs:
-    - name: example-svc
-      port: 8080
+
+
+# HTTP Re-Write:
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-filter-rewrite
+spec:
+  hostnames:
+    - rewrite.example
+  rules:
+    - filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: elsewhere.example
+      backendRefs:
+        - name: example-svc
+          weight: 1
+          port: 80
+----
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-filter-rewrite
+spec:
+  hostnames:
+    - rewrite.example
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /cardamom
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: elsewhere.example
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /fennel
+      backendRefs:
+        - name: example-svc
+          weight: 1
+          port: 80
+----
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-filter-rewrite
+spec:
+  hostnames:
+    - rewrite.example
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /cardamom
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: elsewhere.example
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /fennel
+      backendRefs:
+        - name: example-svc
+          weight: 1
+          port: 80
 

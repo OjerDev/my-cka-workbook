@@ -20,3 +20,29 @@ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nsloo
 
 kubectl get pod nginx-resolver -o wide
 kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup <P-O-D-I-P.default.pod> > /root/CKA/nginx.pod
+
+
+
+apiVersion:
+kind:
+metadata: 
+    name: ksslkc
+    namespace: djskc
+spec:
+    targetRef:
+        apiVersion
+        kind
+        name:
+    resourcePolicy:
+        containerPolicies:
+            - containerName: test
+              controlledResources: ["cpu" , "memry"]
+              maxAllowed: 
+                cpu: 1Gi
+                memory: 500Mi
+              minAllowed:
+                cpu: 1Gi
+                memory: 500Mi
+             mode: "Auto"
+    updatePolicy:
+        updateMode: "Initial"

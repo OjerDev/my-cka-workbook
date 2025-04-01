@@ -286,7 +286,7 @@ spec:
         - name: example-svc
           weight: 1
           port: 80
-----
+---
 
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -311,4 +311,95 @@ spec:
         - name: example-svc
           weight: 1
           port: 80
+
+###### HTTP Mirroring:- ########
+
+
+
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: example-httproute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"
+  rules:
+  - matches:
+    - backendRefs:
+      - name: example-svc
+        port: 8080
+      filters:
+      - type: RequestMirror
+        requestMirror:
+          backendRefs:
+            name: example-svc
+            port: 8080
+
+####### Traffic Spliting:-  #######
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: example-httproute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"
+  rules:
+    - backendRefs:
+      - name: example-svc
+        port: 8080
+        weight: 80
+      - name: example-svc1
+        port: 8080
+        weight: 20
+
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: example-httproute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"
+  rules:
+   - backendRefs:
+      - name: example-svc
+        port: 8080
+   - matches:
+     - headers:
+       - name: traffic
+         value: test
+     backendRefs:
+      - name: example-svc3
+        port: 8080
+
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: header-http-echo
+spec:
+  parentRefs:
+    - name: acme-gw
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /add-a-request-header
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            add:
+              - name: my-header-name
+                value: my-header-value
+      backendRefs:
+        - name: echo
+          port: 8080
 

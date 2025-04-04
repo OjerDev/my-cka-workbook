@@ -1,0 +1,1 @@
+curl -H "Host: www.example.com" https://<nodeinternalip>:<gatwaynodeport>

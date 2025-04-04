@@ -1,6 +1,9 @@
 ####### Helm relates qustions:-
 
 
+Helm Show Values - show chart values
+
+
 1. install argo-cd with version 7.7.3 and "no crd" and no need to isntall
 
 kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stable

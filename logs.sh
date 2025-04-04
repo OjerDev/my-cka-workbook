@@ -1,0 +1,1 @@
+kubectl logs alpine-reader-pod | grep -E "INFO|ERROR" > podlogs.txt

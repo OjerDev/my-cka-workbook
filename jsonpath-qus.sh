@@ -51,42 +51,10 @@ k get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].ad
 
 
 
-kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
+3. kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
+
+4. kubectl get svc redis-service -o jsonpath='{.spec.ports[0].targetPort}'
+
+5. 
 
 
-
-apiVersion: v1
-kind: Pod
-metadata:
-  creationTimestamp: null
-  labels:
-    run: alpine-pod
-  name: alpine-pod
-spec:
-  containers:
-  - image: alpine:latest
-    name: alpine-container
-    command: ["/bin/sh", "-c"]
-    args: ["tail -f /config/log.txt"]
-    resources: {}
-    volumeMounts:
-      - name: config-volume
-        mountPath: /config
-  dnsPolicy: ClusterFirst
-  volumes:
-    - name: config-volume
-      configMap:
-        name: log-configmap
-  restartPolicy: Never
-status: {}
-
-Create a Kubernetes Pod configuration to facilitate real-time monitoring of a log file. Specifically, you need to set up a Pod named alpine-pod-pod that runs an Alpine Linux container.
-
-Requirements:
-
-Name the Pod alpine-pod-pod
-Use alpine:latest image
-Container name alpine-container
-Configure the container to execute the tail -f /config/log.txt command(using args ) with /bin/sh (using command ) to continuously monitor and display the contents of a log file.
-Set up a volume named config-volume that maps to a ConfigMap named log-configmap , this log-configmap already available.
-Ensure the Pod has a restart policy of Never .

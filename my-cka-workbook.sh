@@ -55,6 +55,8 @@ Or:
 
 kubectl -n management logs --all-containers deploy/collect-data > /root/logs.l
 
+kubectl logs etcd-controlplane -n kube-system | grep "INFO\|ERROR" > podlogs.txt
+
 --------
 
 #Check to see how many nodes are ready (not including nodes tainted NoSchedule)and write the number to file.txt.
@@ -216,6 +218,5 @@ ETCDCTL_API=3 etcdctl --endpoints localhost:2379 \
 k auth can-i get pv --as=system:serviceaccount:default:pvviewer
 
 kubectl auth can-i list pods --as=system:serviceaccount:default:my-service-account
-
 
 

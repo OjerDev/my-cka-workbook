@@ -167,6 +167,11 @@ to check the kubelet file - >
 openssl x509 -in /var/lib/kubelet/pki/kubelet-client-current.pem -text
 
 
+
+
+List the services on your Linux operating system that are associated with Kubernetes. Save the output to a file named services.csv. ---> sudo systemctl list-unit-files --type service --all | grep kube > services.csv
+
+
 # check kube-proxy :- 
 
   check the daemonset first and identify the config map:-

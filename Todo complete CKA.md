@@ -1,6 +1,6 @@
-1. Auto scaler || Horizontal & Vertical     ==>  27
-2. Network policies                         ==>  28
-3. Kustomize                                ==>  29
+1. Auto scaler || Horizontal & Vertical     ==>  27 - Done
+2. Network policies                         ==>  28 - Done 
+3. Kustomize                                ==>  29 - Done
 4. ingress & Gateway                        ==>  30
 5. helm related                             ==>  31
 6. jsonpath & PV and pvc                    ==>  01

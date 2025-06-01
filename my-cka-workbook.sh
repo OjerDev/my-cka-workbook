@@ -225,3 +225,10 @@ k auth can-i get pv --as=system:serviceaccount:default:pvviewer
 kubectl auth can-i list pods --as=system:serviceaccount:default:my-service-account
 
 
+Linux Foundation says:
+> Our engineers have already noticed the change in the definitions and made the necessary changes to the exams accordingly. 
+> This means that whenever we want candidates to create a sidecar container, it is aligned with the official doc's definition of sidecar, and if we want candidates to create a co-located container (the old way), we ask for a co-located container.
+> This means if the question says "sidecar", create it in initContainers. If the question says "co-located", create it in containers
+> Remember that if you create a sidecar under initContainers then you must include restartPolicy: Always which is what makes it a sidecar and not a regular initContainer.
+
+

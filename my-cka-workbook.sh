@@ -151,9 +151,12 @@ journalctl | grep apiserver
 
 # debugging worker node 
 
-## check the kubelet
+## Debugging the Kubelet
+
 grep kubelet /var/log/syslog 
-journalctl -u kubelet
+journalctl -u kubelet -xe
+
+
 ps -aux | grep kubelet
 
 to check the kubelet file - > 

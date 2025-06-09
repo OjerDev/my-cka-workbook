@@ -4,6 +4,11 @@ kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- sh -c
 diff rent namespace - apache-svc.<namespace>.svc.cluster.local
 
 
+kubectl run pod --image=busybox --restart=Never --rm -it --command -- nslookup <podipwithdashes.<ns>.pod.cluster.local
+
+kubectl run pod --image=busybox --restart=Never --rm -it --command -- nslookup <svcname>.<ns>.svc.cluster.local
+
+
 modify cluster dns :-
 1. chnage ip range on kube-apiserver.yaml
 2. chnage ip in dns-svc in kubesystem ns

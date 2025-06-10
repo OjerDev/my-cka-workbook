@@ -1,3 +1,8 @@
+You are an administrator preparing your environment to deploy a Kubernetes cluster using kubeadm. Adjust the following network parameters on the system to the following values, and make sure your changes persist reboots:
+
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
+
 
 Create a nginx pod called nginx-resolver using image nginx, expose it internally with a service called nginx-resolver-service. 
 Test that you are able to look up the service and pod names from within the cluster. 

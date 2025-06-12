@@ -3,6 +3,23 @@ You are an administrator preparing your environment to deploy a Kubernetes clust
 net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-iptables = 1
 
+Solution
+Use sysctl to adjust system parameters and make sure they persist across reboots.
+
+To set the required sysctl parameters and make them persistent:
+
+echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf
+echo 'net.bridge.bridge-nf-call-iptables = 1' >> /etc/sysctl.conf
+sysctl -p
+
+To verify:
+
+sysctl net.ipv4.ip_forward
+sysctl net.bridge.bridge-nf-call-iptables
+
+
+
+
 
 Create a nginx pod called nginx-resolver using image nginx, expose it internally with a service called nginx-resolver-service. 
 Test that you are able to look up the service and pod names from within the cluster. 

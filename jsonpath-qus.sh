@@ -1,5 +1,7 @@
 ###### Json related qustions :- 
 
+ kubectl get crd certificates.cert-manager.io -o jsonpath={.spec.versions[*].schema.openAPIV3Schema.properties.spec.properties.subject}
+
 #imp commands:-
 
 kubectl get nodes -o json | jq -c 'paths'   ----< #it will show the paths exactly

@@ -1,18 +1,13 @@
-Define a Kubernetes custom resource definition (CRD) for a new resource kind called Foo (plural form - foos) in the samplecontroller.example.com group.
-
-This CRD should have a version of v1alpha1 with a schema that includes two properties as given below:
+##### 1. Define a Kubernetes custom resource definition (CRD) for a new resource kind called Foo (plural form - foos) in the samplecontroller.example.com group. This CRD should have a version of v1alpha1 with a schema that includes two properties as given below:
 
 
-deploymentName (a string type) and replicas (an integer type with minimum value of 1 and maximum value of 5).
-
-
-
-It should also include a status subresource which enables retrieving and updating the status of Foo object, including the availableReplicas property, which is an integer type.
+1. deploymentName (a string type) and replicas (an integer type with minimum value of 1 and maximum value of 5).
+2. It should also include a status subresource which enables retrieving and updating the status of Foo object, including the availableReplicas property, which is an integer type.
 The Foo resource should be namespace scoped.
-
 
 Note: We have provided a template /root/foo-crd-aecs.yaml for your ease. There are few issues with it so please make sure to incorporate the above requirements before deploying on cluster.
 
+```
 student-node ~ ➜  kubectl config use-context cluster3
 Switched to context "cluster3".
 
@@ -61,5 +56,6 @@ spec:
 student-node ~ ➜  kubectl apply -f foo-crd-aecs.yaml
 customresourcedefinition.apiextensions.k8s.io/foos.samplecontroller.example.com created
 
-========
+```
 
+##### 2. 

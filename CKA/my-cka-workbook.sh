@@ -203,18 +203,7 @@ kubectl create secret tls webhook-server-tls --cert="/root/keys/webhook-server-t
 
 
 -------
-command line arguments in shell 
 
-        spec:
-          containers:
-          - name: simple-python-job
-            image: python
-            imagePullPolicy: IfNotPresent
-            command:
-            - /bin/sh
-            - -c
-            - ps -eaf
-          restartPolicy: OnFailure
 
 
 -----

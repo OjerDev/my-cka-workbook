@@ -8,11 +8,6 @@ The Foo resource should be namespace scoped.
 Note: We have provided a template /root/foo-crd-aecs.yaml for your ease. There are few issues with it so please make sure to incorporate the above requirements before deploying on cluster.
 
 ```
-student-node ~ ➜  kubectl config use-context cluster3
-Switched to context "cluster3".
-
-student-node ~ ➜  vim foo-crd-aecs.yaml
-
 student-node ~ ➜  cat foo-crd-aecs.yaml 
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -58,4 +53,78 @@ customresourcedefinition.apiextensions.k8s.io/foos.samplecontroller.example.com 
 
 ```
 
-##### 2. 
+##### 2. We have a sample CRD at /root/ckad10-crd-aecs.yaml which should have the following validations:
+
+
+
+1. destinationName, country, and city must be string types.
+
+2. pricePerNight must be an integer between 50 and 5000.
+
+3. durationInDays must be an integer between 1 and 30.
+
+
+1. Update the file incorporating the above validations in a namespaced scope.
+
+
+Note: Remember to create the CRD after the required changes.
+
+```
+student-node ~ ➜  cat ckad10-crd-aecs.yaml 
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: holidaydestinations.destinations.k8s.io
+  annotations:
+    "api-approved.kubernetes.io": "unapproved, experimental-only"
+  labels:
+    app: holiday
+spec:
+  group: destinations.k8s.io
+  names:
+    kind: HolidayDestination
+    singular: holidaydestination
+    plural: holidaydestinations
+    shortNames:
+      - hd
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        # schema used for validation
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                destinationName:
+                  type: string
+                country:
+                  type: string
+                city:
+                  type: string
+                pricePerNight:
+                  type: integer
+                  minimum: 50
+                  maximum: 5000
+                durationInDays:
+                  type: integer
+                  minimum: 1
+                  maximum: 30
+            status:
+              type: object
+              properties:
+                availableRooms:
+                  type: integer
+                  minimum: 0
+                  maximum: 1000
+      # subresources for the custom resource
+      subresources:
+        # enables the status subresource
+        status: {}
+```
+
+=====

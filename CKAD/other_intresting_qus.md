@@ -27,5 +27,8 @@ ckad16-rqc   20s   resourcequotas: 1/1
 ```
 =====
 
+**In the ckad-pod-design namespace, create a pod named privileged-pod that runs the nginx:1.17 image, and the container should be run in privileged mode.**
 
+`kubectl run privileged-pod --image=nginx:1.17 --privileged=true -n ckad-pod-design`
 
+=====

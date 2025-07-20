@@ -8,7 +8,7 @@
 5. Mock 5 :- 
 
 
-#### Qution to revisit :- 
+#### Question to revisit :- 
 
 1. Mock 3 - 12, 14, 18
 2. Mock 4 - 10, 14, 17

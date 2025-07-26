@@ -30,3 +30,7 @@ or
 
 
 ` command: ["perl", "-Mbignum=bpi", "-wle", "print bpi(1024)"]`
+
+```
+kubectl rollout history deployment -n blue-apd foundary-apd --revision=3
+```

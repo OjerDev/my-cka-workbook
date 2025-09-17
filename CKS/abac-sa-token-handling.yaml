@@ -4,3 +4,69 @@ Configure kubectl to use the retrieved token by setting up new credentials and c
 1. Set up credentials named john using the service account token.
 2. Create a context named john-context using these credentials.
 3. Switch to the new context.
+
+
+
+Create the abac-policy.jsonl file with the specified content:
+
+cat <<EOF > /etc/kubernetes/abac/abac-policy.jsonl
+{"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"user": "system:serviceaccount:default:john", "namespace": "default", "resource": "pods", "apiGroup": "*" , "readonly": true}}
+EOF
+
+## Configuring the API Server to Use ABAC
+### Configure the Kubernetes API server to use the ABAC authorization mode with the policy file you created.
+
+Update the API server configuration to include the following parameters:
+  --authorization-policy-file=/path/to/abac-policy.jsonl
+  --authorization-mode=Node,RBAC,ABAC
+
+Replace /path/to/abac-policy.jsonl with the actual path to your abac-policy.jsonl file that we created earlier.
+
+Use crictl ps -a to check the status of the kube-apiserver container.
+
+ Step 1: Create the service account:
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: john
+  namespace: default
+secrets: 
+  - name: john-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: john-secret
+  namespace: default
+  annotations:
+    kubernetes.io/service-account.name: john
+type: kubernetes.io/service-account-token
+
+
+kubectl get secret john-secret -o jsonpath='{.data.token}' | base64 --decode > john-secret.txt
+
+Step 1: Set up new credentials:
+
+export SA_TOKEN=$(cat john-secret.txt)
+kubectl config set-credentials john --token=$SA_TOKEN
+
+
+Step 2: Set up the new context:
+
+kubectl config set-context john-context --cluster=kubernetes --namespace=default --user=john
+kubectl config use-context john-context
+
+Testing the ABAC Configuration
+Verify the permissions of the john service account:
+
+Attempt to list pods in the default namespace.
+Attempt to create a pod in the default namespace.
+Test 1: List pods (should be allowed):
+
+kubectl get pods -n default
+
+Test 2: Attempt to create a pod (should be denied):
+
+kubectl run test-pod --image=nginx
+

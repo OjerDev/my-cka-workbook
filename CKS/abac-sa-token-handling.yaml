@@ -1,0 +1,6 @@
+## Setting Up kubectl Credentials for the Service Account
+Configure kubectl to use the retrieved token by setting up new credentials and context.
+
+1. Set up credentials named john using the service account token.
+2. Create a context named john-context using these credentials.
+3. Switch to the new context.
